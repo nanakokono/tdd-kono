@@ -13,6 +13,7 @@ export class VendingMachine {
     }
   ];
   amount = 0;
+  changesAmount: number = 1;
 
   putInMoney(amount: number) {
     this.amount += amount;
