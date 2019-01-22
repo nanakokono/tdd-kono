@@ -4,7 +4,7 @@ interface IDrink {
   stockNumber: number
 }
 
-export class VendingMachine {
+export class Stock {
   drinks: IDrink[] = [
     {
       name: 'コーラ',
@@ -12,25 +12,39 @@ export class VendingMachine {
       stockNumber: 0
     }
   ];
+
+  constructor() {}
+  // constructor(public drinks: IDrink[]) {}
+
+  getStockDrinkByName(drinkName: string): IDrink {
+    return this.drinks.filter(drink => {
+      return drink.name === drinkName;
+    })[0];
+  }
+
+  addStock(selectedDrink: string, addStockNumber: number) {
+    this.getStockDrinkByName(selectedDrink).stockNumber += addStockNumber;
+  }
+
+}
+
+
+export class VendingMachine {
   amount = 0;
   changesAmount: number = 1;
+
+  constructor(public stock: Stock) {}
 
   putInMoney(amount: number) {
     this.amount += amount;
     return amount;
   }
 
-  buyDrink(selectedDrink: string) {
-  //  amountが飲み物の値段より高いか
-  //   コーラの在庫があるか
-    return this.drinks.filter(drink => {
-      return drink.name === selectedDrink
-    })[0].name;
+  buyDrink(selectedDrink: string): string {
+    return this.stock.getStockDrinkByName(selectedDrink).name;
   }
 
   addDrink(selectedDrink: string, addStockNumber: number) {
-    this.drinks.filter(drink => {
-      return drink.name === selectedDrink
-    })[0].stockNumber += addStockNumber;
+    this.stock.addStock(selectedDrink, addStockNumber);
   }
 }
